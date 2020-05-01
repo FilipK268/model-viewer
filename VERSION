@@ -1,0 +1,11 @@
+commit 9d75b2564ed923e26bb34a36ec515f05c716d697
+Author: Emmett Lalish <elalish@google.com>
+Date:   Fri May 1 14:06:22 2020 -0700
+
+    Fix adding element (#1185)
+    
+    * switch all scenes canvas
+    
+    * added test
+    
+    * adding leak testing example
