@@ -44,14 +44,13 @@ export const openSceneViewer = (() => {
   const noArViewerSigil = '#model-viewer-no-ar-fallback';
   let fallbackInvoked = false;
 
-  return (gltfSrc: string, title: string, arScale: string) => {
+  return (gltfSrc: string, title: string, arScale: string, location: string) => {
     // If the fallback has ever been invoked this session, bounce early:
     if (fallbackInvoked) {
       return;
     }
-
-    const location = self.location.toString();
-    const locationUrl = new URL(location);
+    
+    const locationUrl = new URL(location ? location : self.location.toString());
     const modelUrl = new URL(gltfSrc);
     const scheme = modelUrl.protocol.replace(':', '');
 
@@ -216,7 +215,7 @@ export const ARMixin = <T extends Constructor<ModelViewerElementBase>>(
           await this[$enterARWithWebXR]();
           break;
         case ARMode.SCENE_VIEWER:
-          openSceneViewer(this.src!, this.alt || '', this.arScale);
+          openSceneViewer(this.src!, this.alt || '', this.arScale, this.location);
           break;
         default:
           console.warn(
