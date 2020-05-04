@@ -49,8 +49,8 @@ export const openSceneViewer = (() => {
     if (fallbackInvoked) {
       return;
     }
-    
-    const locationUrl = new URL(location ? location : self.location.toString());
+
+    const locationUrl = new URL(location);
     const modelUrl = new URL(gltfSrc);
     const scheme = modelUrl.protocol.replace(':', '');
 
@@ -136,6 +136,7 @@ export declare interface ARInterface {
   arModes: string;
   arScale: string;
   iosSrc: string|null;
+  location: string|null;
   quickLookBrowsers: string;
   readonly canActivateAR: boolean;
   activateAR(): Promise<void>;
@@ -158,6 +159,9 @@ export const ARMixin = <T extends Constructor<ModelViewerElementBase>>(
     @property({type: String, attribute: 'quick-look-browsers'})
     quickLookBrowsers: string = 'safari';
 
+    @property({type: String, attribute: 'location'})
+    location: string|null = null;
+    
     get canActivateAR(): boolean {
       return this[$arMode] !== ARMode.NONE;
     }
@@ -215,7 +219,7 @@ export const ARMixin = <T extends Constructor<ModelViewerElementBase>>(
           await this[$enterARWithWebXR]();
           break;
         case ARMode.SCENE_VIEWER:
-          openSceneViewer(this.src!, this.alt || '', this.arScale, this.location);
+          openSceneViewer(this.src!, this.alt || '', this.arScale, this.location || self.location.toString());
           break;
         default:
           console.warn(
